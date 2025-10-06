@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Mishra</title>
+    <link rel="icon" href="../images/logo.png" type="image/x-icon">
+
+    <meta name="title" content="About Mishra">
+    <meta name="description" content="The About section where Mishra described himself and his experience">
+    <meta name="keywords" content="">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="about.css">
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="../images/logo.png" alt="Mishra Logo" class="logo-img">
+                <span class="logo-text">About Mishra</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About Mishra</a></li>
+                <li class="nav-item"><a href="../contact_section/contact.html" class="nav-link">Contact Mishra</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="setup-hero">
+                <div class="setup-hero-content">
+                    <div class="setup-hero-badge">
+                        <i class="fas fa-book"></i>
+                        Mishra Portfolio
+                    </div>
+                    <h1>ABOUT MISHRA</h1>
+                    <p>Ideas by man and only that will last <br>
+                        And over time we've learned from the past <br>
+                        That no man's fit to rule the world alone <br>
+                        A man will die, but not his ideas.</p>
+
+
+                </div>
+            </section>
+
+            <!-- Category Selection -->
+            <section class="setup" id="categories">
+                <!-- Category cards will be generated dynamically from setupConfig -->
+            </section>
+
+
+
+
+
+            <!-- Dynamic Instructions Container - All instruction sections will be generated automatically -->
+            <div id="dynamic-instructions-container">
+                <!-- All instruction sections will be dynamically generated from setupConfig -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal" onclick="closeImageModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script src="about.js"></script>
+    <script src="../script.js"></script>
+</body>
+
+</html>
