@@ -1026,30 +1026,23 @@ document.head.appendChild(style);
 
 
 
-  // Get all videos
-  const videos = document.querySelectorAll("video");
 
-  videos.forEach(video => {
-    // Disable any autoplay
-    video.autoplay = false;
-    video.removeAttribute("autoplay");
+// copy email
 
-    // When user plays one video, pause all others
-    video.addEventListener("play", () => {
-      videos.forEach(v => {
-        if (v !== video) {
-          v.pause();
-        }
-      });
-    });
-
-    // Optional: Click on video toggles play/pause
-    video.addEventListener("click", () => {
-      if (video.paused) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    });
-  });
-
+function copyEmail() {
+        const email = "beyond-the-limit@mishradev.com";
+        navigator.clipboard.writeText(email).then(() => {
+            alert("Email copied to clipboard: " + email);
+        }).catch(() => {
+            alert("Failed to copy email. Please copy manually: " + email);
+        });
+    }
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+    

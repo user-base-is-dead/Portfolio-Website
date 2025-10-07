@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Me</title>
     <link rel="icon" href="../images/logo.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    
+
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar">
@@ -40,6 +44,21 @@
                     <h3>Connect with me</h3>
                     <p>Here are some of my social media links.</p>
                     <div class="social-links">
+
+                        <button class="social-link copy-btn" onclick="copyEmail()">
+                            <img src="/images/social_media_images/emailcopy.png" alt="Copy Email">
+                            <span>Copy Email</span>
+                        </button>
+
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=beyond-the-limit@mishradev.com"
+                            class="social-link" target="_blank">
+                            <img src="/images/social_media_images/email.png" alt="Email via Gmail">
+                            <span>Email via Browser</span>
+                        </a>
+                        <a href="mailto:beyond-the-limit@mishradev.com" class="social-link">
+                            <img src="/images/social_media_images/email.png" alt="Default Email">
+                            <span>Email via<br>Default App</span>
+                        </a>
                         <a href="https://discord.com/users/1318549874740035654" class="social-link" target="_blank">
                             <img src="../images/social_media_images/discord.png" alt="Discord">
                             <span>Discord</span>
@@ -59,4 +78,5 @@
     </section>
     <script src="../script.js"></script>
 </body>
+
 </html>
