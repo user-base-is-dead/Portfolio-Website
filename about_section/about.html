@@ -85,6 +85,16 @@
 
     <script src="about.js"></script>
     <script src="../script.js"></script>
+    <script>
+window.addEventListener("load", () => {
+  const stuck = document.querySelector(".page-transition");
+  if (stuck) stuck.remove();
+});
+window.addEventListener("pageshow", () => {
+  const stuck = document.querySelector(".page-transition");
+  if (stuck) stuck.remove();
+});
+</script>
 </body>
 
 </html>

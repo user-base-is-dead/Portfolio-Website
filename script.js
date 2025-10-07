@@ -509,13 +509,149 @@ class PageEnhancementController {
     constructor() {
         this.init();
     }
-    
     init() {
         this.addCustomCSSAnimations();
         this.setupPageTransitions();
         this.addLoadingAnimation();
         this.setupCursorEffects();
     }
+    
+    addCustomCSSAnimations() {
+        // Unchanged, keep as is
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                0% { transform: scale(0); opacity: 1; }
+                100% { transform: scale(4); opacity: 0; }
+            }
+            @keyframes floatUp {
+                0% { transform: translateY(0px); opacity: 1; }
+                100% { transform: translateY(-50px); opacity: 0; }
+            }
+            @keyframes particle-float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+                50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+            }
+            .hover-particle {
+                animation: floatUp 2s ease-out forwards;
+            }
+            .page-transition {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: var(--gradient-primary);
+                z-index: 10000;
+                transform: translateX(-100%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .page-transition.active {
+                transform: translateX(0);
+            }
+            .cursor-trail {
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: rgba(99, 102, 241, 0.3);
+                pointer-events: none;
+                z-index: 9999;
+                animation: cursor-fade 1s ease-out forwards;
+            }
+            @keyframes cursor-fade {
+                0% { opacity: 1; transform: scale(1); }
+                100% { opacity: 0; transform: scale(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    transitionToPage(href) {
+        const oldOverlays = document.querySelectorAll('.page-transition');
+        oldOverlays.forEach((overlay) => overlay.remove());
+        const transition = document.createElement('div');
+        transition.className = 'page-transition';
+        document.body.appendChild(transition);
+        setTimeout(() => {
+            transition.classList.add('active');
+        }, 50);
+        setTimeout(() => {
+            window.location.href = href;
+            setTimeout(() => {
+                transition.remove();
+            }, 600);
+        }, 600);
+    }
+
+
+    addLoadingAnimation() {
+        // Unchanged, keep as is
+        const loader = document.createElement('div');
+        loader.className = 'page-loader';
+        loader.innerHTML = `
+            <div class="loader-content">
+                <div class="loader-spinner"></div>
+                <div class="loader-text">Loading Mishra Portfolio...</div>
+            </div>
+        `;
+        const loaderStyle = document.createElement('style');
+        loaderStyle.textContent = `
+            .page-loader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: var(--bg-primary);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                transition: opacity 0.5s ease;
+            }
+            .loader-content {
+                text-align: center;
+            }
+            .loader-spinner {
+                width: 60px;
+                height: 60px;
+                border: 3px solid var(--border-color);
+                border-top: 3px solid var(--primary-color);
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 20px;
+            }
+            .loader-text {
+                color: var(--text-primary);
+                font-size: 1.2rem;
+                font-weight: 600;
+                opacity: 0;
+                animation: fadeIn 0.5s ease 0.5s forwards;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            @keyframes fadeIn {
+                0% { opacity: 0; transform: translateY(20px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(loaderStyle);
+        document.body.appendChild(loader);
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.remove();
+                    loaderStyle.remove();
+                }, 500);
+            }, 1000);
+        });
+    }
+
+
     
     addCustomCSSAnimations() {
         const style = document.createElement('style');
@@ -573,30 +709,51 @@ class PageEnhancementController {
         `;
         document.head.appendChild(style);
     }
-    
-    setupPageTransitions() {
-        const pageLinks = $$('a[href$=".html"]');
-        pageLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.transitionToPage(link.getAttribute('href'));
-            });
+
+setupPageTransitions() {
+    const pageLinks = $$('a[href$=".html"]');
+    pageLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.transitionToPage(link.getAttribute('href'));
         });
-    }
+    });
+
+    
+    window.addEventListener('pageshow', () => {
+        const transition = document.querySelector('.page-transition');
+        if (transition) transition.remove();
+    });
+}
+
     
     transitionToPage(href) {
-        const transition = document.createElement('div');
-        transition.className = 'page-transition';
-        document.body.appendChild(transition);
-        
-        setTimeout(() => {
-            transition.classList.add('active');
-        }, 50);
-        
-        setTimeout(() => {
-            window.location.href = href;
-        }, 600);
-    }
+    //  Remove any existing overlay before starting a new transition
+    const oldOverlay = document.querySelector('.page-transition');
+    if (oldOverlay) oldOverlay.remove();
+
+    //  Create new overlay
+    const transition = document.createElement('div');
+    transition.className = 'page-transition';
+    document.body.appendChild(transition);
+
+    //  Activate the animation
+    setTimeout(() => {
+        transition.classList.add('active');
+    }, 50);
+
+    //  Navigate to next page
+    setTimeout(() => {
+        window.location.href = href;
+    }, 600);
+
+    //  Cleanup if user comes back via browser cache
+    window.addEventListener('pageshow', () => {
+        const stuck = document.querySelector('.page-transition');
+        if (stuck) stuck.remove();
+    });
+}
+
     
     addLoadingAnimation() {
         const loader = document.createElement('div');
@@ -911,34 +1068,38 @@ class RedThemeAnimationController extends AnimationController {
     }
 }
 
-// Initialize all controllers when DOM is loaded
+
+
+// Enhanced fix for page transition overlay stuck issue
+
+
 document.addEventListener('DOMContentLoaded', () => {
+    const transition = document.querySelector('.page-transition');
+    if (transition) {
+        transition.remove();
+    }
+    document.body.style.pointerEvents = 'auto';
+    document.body.style.overflow = 'auto';
     new AnimationController();
     new NavigationController();
     new FormController();
     new PageEnhancementController();
     new CountdownController();
     new VideoController();
-
-    
-    // Add custom CSS for new features
     const customStyle = document.createElement('style');
     customStyle.textContent = `
         @keyframes redParticleFloat {
             0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
             50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
         }
-        
         @keyframes urgencyPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.02); }
         }
-        
         @keyframes priceGlow {
             0%, 100% { text-shadow: 0 0 10px rgba(220, 38, 38, 0.3); }
             50% { text-shadow: 0 0 20px rgba(220, 38, 38, 0.8); }
         }
-        
         .social-proof-notification {
             position: fixed;
             bottom: 20px;
@@ -955,49 +1116,76 @@ document.addEventListener('DOMContentLoaded', () => {
             transition: all 0.3s ease;
             max-width: 350px;
         }
-        
         .social-proof-notification.show {
             transform: translateX(0);
             opacity: 1;
         }
-        
         .notification-content {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
         .notification-icon {
             font-size: 1.2rem;
         }
-        
         .notification-text {
             color: var(--text-secondary);
             font-size: 0.9rem;
             font-weight: 500;
         }
-        
         .hero-video {
             filter: brightness(0.7) contrast(1.2);
         }
-        
         .demo-video video {
             border: 2px solid var(--border-color);
         }
-        
         .demo-video:hover video {
             border-color: var(--primary-color);
         }
     `;
     document.head.appendChild(customStyle);
-    
-    // Add a small delay to ensure all elements are ready
     setTimeout(() => {
         document.body.classList.add('loaded');
     }, 100);
 });
 
-// Add loaded class to body for CSS animations
+// ... (pehle ka code, jaise RedThemeAnimationController, PageEnhancementController, unchanged)
+window.addEventListener('pageshow', (event) => {
+    const transitions = document.querySelectorAll('.page-transition');
+    transitions.forEach((transition) => transition.remove());
+    document.body.style.pointerEvents = 'auto';
+    document.body.style.overflow = 'auto';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.height = '';
+    document.body.style.zIndex = '';
+    document.documentElement.style.pointerEvents = 'auto';
+    document.documentElement.style.overflow = 'auto';
+    document.documentElement.style.position = '';
+    document.documentElement.style.zIndex = '';
+    if (event.persisted) {
+        document.documentElement.style.display = 'none';
+        document.documentElement.offsetHeight;
+        document.documentElement.style.display = '';
+        window.dispatchEvent(new Event('resize'));
+       
+        if (window.location.pathname.includes('about.html')) {
+            window.dispatchEvent(new Event('DOMContentLoaded'));
+        }
+    }
+});
+
+window.addEventListener('beforeunload', () => {
+    const transitions = document.querySelectorAll('.page-transition');
+    transitions.forEach((transition) => transition.remove());
+});
+
+
+
+
+
+
+
 const style = document.createElement('style');
 style.textContent = `
     .loaded .hero-content {

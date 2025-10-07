@@ -449,7 +449,13 @@ function initializeStepAnimations() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
-    // Generate all dynamic content
+    
+    const transitions = document.querySelectorAll('.page-transition');
+    transitions.forEach((transition) => transition.remove());
+    document.body.style.pointerEvents = 'auto';
+    document.documentElement.style.pointerEvents = 'auto';
+    
+    
     generateCategoryCards();
     generateInstructionSections();
     initializeStepAnimations();
